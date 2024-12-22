@@ -8,7 +8,6 @@ from pandas import DataFrame
 from matplotlib import pyplot as plt
 import seaborn as sns
 
-
 def generate_data(num: int) -> None:
     """This function creates a randomly generated data to be written in the CSV file."""
     fake = Faker('en_IN')  # create faker object for creating fake data
@@ -41,41 +40,42 @@ def generate_data(num: int) -> None:
         csv_writer.writerows(zip(ids, names_list, location_list, college_list, years_list, programs_list,
                                  sources_list))  # Writing the data into the csv file
 
-
 def demographic_analysis(df: DataFrame) -> None:
     print('Demographic Analysis:')
 
-    # Trend analysis based on location
-    location_trend = df['City'].value_counts().head(5)  # Top 5 locations
-    print('\nLead sourcing based on location:')
-    print(location_trend)
-
-    # Trend analysis based on college
-    college_trend = df['College'].value_counts().head(5)  # Top 5 colleges
-    print('\nLead sourcing based on college:')
-    print(college_trend)
-
     # Trend analysis based on year of study
-    year_trend = df['Year'].value_counts()
-    print('\nLead sourcing based on year of study:')
-    print(year_trend)
+    year_counts = df['Year'].value_counts()
 
-    # Visualization
-    fig, axes = plt.subplots(3, 1, figsize=(12, 18))
-    sns.barplot(x=location_trend.index, y=location_trend.values, ax=axes[0])
-    axes[0].set_title('Lead Sourcing by Location')
-    axes[0].set_xticklabels(axes[0].get_xticklabels(), rotation=0)
-
-    sns.barplot(x=college_trend.index, y=college_trend.values, ax=axes[1])
-    axes[1].set_title('Lead Sourcing by College')
-    axes[1].set_xticklabels(axes[1].get_xticklabels(), rotation=0)
-
-    sns.barplot(x=year_trend.index, y=year_trend.values, ax=axes[2])
-    axes[2].set_title('Lead Sourcing by Year of Study')
-
-    plt.tight_layout()
+    # Visualization for Year distribution
+    plt.figure(figsize=(8, 5))
+    sns.set(style="whitegrid")
+    sns.barplot(x=year_counts.index, y=year_counts.values, palette="viridis")
+    plt.title("Distribution of Students by Year")
+    plt.xlabel("Year")
+    plt.ylabel("Number of Students")
     plt.show()
 
+    # Trend analysis based on program
+    program_counts = df['Program'].value_counts()
+
+    # Visualization for Program distribution
+    plt.figure(figsize=(8, 5))
+    sns.barplot(y=program_counts.index, x=program_counts.values, palette="cubehelix")
+    plt.title("Distribution of Students by Program")
+    plt.xlabel("Number of Students")
+    plt.ylabel("Program")
+    plt.show()
+
+    # Trend analysis based on source
+    source_counts = df['Source'].value_counts()
+
+    # Visualization for Source distribution
+    plt.figure(figsize=(8, 5))
+    sns.barplot(y=source_counts.index, x=source_counts.values, palette="magma")
+    plt.title("Distribution of Students by Source")
+    plt.xlabel("Number of Students")
+    plt.ylabel("Source")
+    plt.show()
 
 def program_analysis(df: DataFrame) -> None:
     print('Program Analysis:')
@@ -90,12 +90,6 @@ def program_analysis(df: DataFrame) -> None:
     sns.barplot(x=program_trend.index, y=program_trend.values)
     plt.title('Interest Level for various E-Learning Platforms')
     plt.show()
-
-    # Recommendations
-    recommendations = df.groupby('Program')['City'].value_counts().unstack().fillna(0)
-    print("\nRecommendations for target demographics:")
-    print(recommendations)
-
 
 def data_preprocessing(df: DataFrame) -> None:
     print('Data Preprocessing Steps:')
@@ -120,7 +114,6 @@ def data_preprocessing(df: DataFrame) -> None:
     print('\nSummary of cleaned data:')
     print(df.describe())
 
-
 def main() -> None:
     size = 10000
 
@@ -134,7 +127,6 @@ def main() -> None:
     demographic_analysis(data)
     program_analysis(data)
     data_preprocessing(data)
-
 
 if __name__ == '__main__':
     main()

@@ -77,6 +77,26 @@ def demographic_analysis(df: DataFrame) -> None:
     plt.show()
 
 
+def program_analysis(df: DataFrame) -> None:
+    print('Program Analysis:')
+
+    # Trend analysis based on program
+    program_trend = df['Program'].value_counts().head(5)  # Top 5 programs
+    print('\nInterest levels for various e-learning platforms:')
+    print(program_trend)
+
+    # Visualization
+    plt.figure(figsize=(12, 6))
+    sns.barplot(x=program_trend.index, y=program_trend.values)
+    plt.title('Interest Level for various E-Learning Platforms')
+    plt.show()
+
+    # Recommendations
+    recommendations = df.groupby('Program')['City'].value_counts().unstack().fillna(0)
+    print("\nRecommendations for target demographics:")
+    print(recommendations)
+
+
 def main() -> None:
     size = 10000
 
@@ -88,6 +108,7 @@ def main() -> None:
 
     # Execute the tasks
     demographic_analysis(data)
+    program_analysis(data)
 
 
 if __name__ == '__main__':

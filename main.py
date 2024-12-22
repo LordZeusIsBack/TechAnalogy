@@ -97,6 +97,30 @@ def program_analysis(df: DataFrame) -> None:
     print(recommendations)
 
 
+def data_preprocessing(df: DataFrame) -> None:
+    print('Data Preprocessing Steps:')
+
+    # Checking for missing values
+    missing_values = df.isnull().sum()
+    print('\nMissing values in the dataset:')
+    print(missing_values)
+
+    # Example: Fill missing values (if any)
+    df.fillna(method='ffill', inplace=True)
+
+    # Checking for duplicates
+    duplicates = df.duplicated().sum()
+    print('\nNumber of duplicate rows:')
+    print(duplicates)
+
+    # Example: Remove duplicates (if any)
+    df.drop_duplicates(inplace=True)
+
+    # Summary of cleaned data
+    print('\nSummary of cleaned data:')
+    print(df.describe())
+
+
 def main() -> None:
     size = 10000
 
@@ -109,6 +133,7 @@ def main() -> None:
     # Execute the tasks
     demographic_analysis(data)
     program_analysis(data)
+    data_preprocessing(data)
 
 
 if __name__ == '__main__':
